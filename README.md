@@ -34,8 +34,11 @@ The wallpaper is updated every time `updateWallpaper.sh` is run. To trigger the 
 ```
 * * * * * export "binpath=/path/to/script/directory"; "DISPLAY=:$(ls -1 /tmp/.X11-unix/X* | grep -oE "[0-9]*$" | sort -n | head -1)"; export "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus"; (pushd "${binpath}" && ./updateWallpaper.sh && ./setWallpaper.sh; popd) 2>&1 | logger -t "process-wallpaper"
 ```
-### Most other
+### Cron
 ```
-* * * * * cd /path/to/script/directory && ./updateWallpaper.sh > /tmp/wallpaper.log 2>&1
+5 * * * * /home/fallstop/Documents/projects/process-wallpaper/updateWallpaper.sh > /home/fallstop/Documents/projects/process-wallpaper/cron.log
 
 ```
+### Shortcut
+
+/home/fallstop/Documents/projects/process-wallpaper/updateWallpaper.sh > /home/fallstop/Documents/projects/process-wallpaper/shortcut.log

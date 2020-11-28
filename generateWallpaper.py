@@ -41,22 +41,23 @@ resourceDict = {}
 for command, [cpu, mem] in commandDict.items():
     resourceDict[command] = (cpu ** 2 + mem ** 2) ** 0.5
 
+configJSON = json.loads(open("config.json", "r").read())
+
 width, height = None, None
 try:
     width, height = ((os.popen("xrandr | grep '*'").read()).split()[0]).split("x")
-    width = int(width)
-    height = int(height)
+    width = int(width)*configJSON['resolution']["downScaler"]
+    height = int(height)*configJSON['resolution']["downScaler"]
 except:
     pass
 
-configJSON = json.loads(open("config.json", "r").read())
-
 if not width or not height:
-    width = configJSON['resolution']['width']
-    height = configJSON['resolution']['height']
+    width = configJSON['resolution']['width']*configJSON['resolution']["downScaler"]
+    height = configJSON['resolution']['height']*configJSON['resolution']["downScaler"]
 
 wc = WordCloud(
-    background_color=configJSON["wordcloud"]["background"],
+    background_color="rgba(255, 255, 255, 0)",
+    mode="RGBA",
     width=width - 2 * int(configJSON["wordcloud"]["margin"]),
     height=height - 2 * int(configJSON["wordcloud"]["margin"])
 ).generate_from_frequencies(resourceDict)
@@ -64,12 +65,19 @@ wc = WordCloud(
 wc.to_file('wc.png')
 
 wordcloud = Image.open("wc.png")
-wallpaper = Image.new('RGB', (width, height), configJSON["wordcloud"]["background"])
+wallpaper = Image.new('RGBA', (width, height), configJSON["wordcloud"]["background"])
+wallpaper.paste(
+    Image.open("backgroundImage.png").resize((width, height))
+) 
 wallpaper.paste(
     wordcloud,
     (
         configJSON["wordcloud"]["margin"],
         configJSON["wordcloud"]["margin"]
-    )
+    ),
+    mask=wordcloud
 )
-wallpaper.save("wallpaper.png")
+
+wallpaperScaled = wallpaper.resize((configJSON['resolution']['width'],configJSON['resolution']['height']),resample=Image.ANTIALIAS) 
+
+wallpaperScaled.save("wallpaper.png")

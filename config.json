@@ -1,7 +1,8 @@
 {
     "resolution": {
         "height": 1080,
-        "width": 1920
+        "width": 1920,
+        "downScaler": 2
     },
     "wordcloud": {
         "background": "#101010",

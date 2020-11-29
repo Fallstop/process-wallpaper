@@ -58,8 +58,8 @@ if not width or not height:
 wc = WordCloud(
     background_color="rgba(255, 255, 255, 0)",
     mode="RGBA",
-    width=width - 2 * int(configJSON["wordcloud"]["margin"]),
-    height=height - 2 * int(configJSON["wordcloud"]["margin"])
+    width=width - 2 * int(configJSON["wordcloud"]["horMargin"]),
+    height=height - 2 * int(configJSON["wordcloud"]["vertMargin"])
 ).generate_from_frequencies(resourceDict)
 
 wc.to_file('wc.png')
@@ -72,8 +72,8 @@ wallpaper.paste(
 wallpaper.paste(
     wordcloud,
     (
-        configJSON["wordcloud"]["margin"],
-        configJSON["wordcloud"]["margin"]
+        configJSON["wordcloud"]["horMargin"],
+        configJSON["wordcloud"]["vertMargin"],
     ),
     mask=wordcloud
 )
